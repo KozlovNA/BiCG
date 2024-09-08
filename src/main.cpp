@@ -1,6 +1,7 @@
 # include <iostream>
 # include <Eigen/Dense>
 # include <BiCGSTAB.h>
+# include <BlBiCGSTAB.h>
 
 int main (int argc, char** argv){
     Eigen::MatrixXd A(3,3);
@@ -12,8 +13,8 @@ int main (int argc, char** argv){
     std::cout << b << "\n\n";
     Eigen::Vector3d x0(0, 0, 0);
     std::cout << x0 << "\n\n";
-    BiCGSTAB  bcg(A, b, x0, 2);
+    BlBiCGSTAB bcg(A, b, x0, 2);
     bcg.solve(); 
-    std::cout << bcg.xk << "\n\n";
+    std::cout << bcg.Xk << "\n\n";
     return 0;
 }

@@ -6,7 +6,7 @@
 
 class BiCGSTAB {
 public:
-    int n, m;
+    int n;
     Eigen::MatrixXd A;
     Eigen::VectorXd b;
     Eigen::VectorXd r0c; 

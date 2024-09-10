@@ -1,6 +1,7 @@
 #ifndef LU_H
 #define LU_H
 #include <Eigen/Dense>
+#include <iostream>
 
 Eigen::MatrixXd LU_solve(Eigen::MatrixXd &A, Eigen::MatrixXd &B); 
     // Solves linear system with many right-hand sides AX=B        

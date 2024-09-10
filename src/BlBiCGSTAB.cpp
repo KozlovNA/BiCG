@@ -12,7 +12,7 @@ BlBiCGSTAB::BlBiCGSTAB(Eigen::MatrixXd _A, Eigen::MatrixXd _B, Eigen::MatrixXd _
 
 void BlBiCGSTAB::solve(){
     int k = 0;
-    while (k < N/s){
+    while (k < N*s){
         Vk = A*Pk;
         Eigen::MatrixXd alpha_system = R0c.transpose()*Vk;
         Eigen::MatrixXd alpha_rhs = R0c.transpose()*Rk;

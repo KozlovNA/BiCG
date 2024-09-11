@@ -8,11 +8,20 @@ BlBiCGSTAB::BlBiCGSTAB(Eigen::MatrixXd _A, Eigen::MatrixXd _B, Eigen::MatrixXd _
     Rk = B - A*Xk;
     Pk = Rk;
     R0c = Rk;
+
+    std::vector<double> R_norms(s, 0);
+    for (int i = 0; i < s; i++) 
+    {
+        R_norms[i] = Rk.col(i).transpose()*Rk.col(i);
+    } 
+    
+    R0_2norm_max = *std::max_element(R_norms.begin(), R_norms.end());
 }
 
-void BlBiCGSTAB::solve(){
+void BlBiCGSTAB::solve()
+{
     int k = 0;
-    while (k < N*s){
+    while (k < (N+s-1)/s){
         Vk = A*Pk;
         Eigen::MatrixXd alpha_system = R0c.transpose()*Vk;
         Eigen::MatrixXd alpha_rhs = R0c.transpose()*Rk;
@@ -22,6 +31,10 @@ void BlBiCGSTAB::solve(){
         omega = (Tk.transpose()*Sk).trace() / ((Tk.transpose()*Tk).trace());
         Xk += Pk*alpha + omega*Sk;
         Rk = Sk - omega*Tk;
+        if (check_exit())
+        {
+            break;
+        }
         Eigen::MatrixXd beta_system = R0c.transpose()*Vk;
         Eigen::MatrixXd beta_rhs = -R0c.transpose()*Tk;
         beta = LU_solve(beta_system, beta_rhs);
@@ -29,4 +42,15 @@ void BlBiCGSTAB::solve(){
         Pk = Rk + (Pk_prev - omega*Vk)*beta;
         k+=1;
     }
+}
+
+bool BlBiCGSTAB::check_exit()
+{
+    std::vector<double> R_norms(5, 0);
+    for (int i = 0; i < s; i++) 
+    {
+        R_norms[i] = Rk.col(i).transpose()*Rk.col(i);
+    } 
+    double Rk_2norm_max = *std::max_element(R_norms.begin(), R_norms.end());
+    return (Rk_2norm_max < (epsilon * epsilon * R0_2norm_max));
 }

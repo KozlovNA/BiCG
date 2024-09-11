@@ -23,15 +23,16 @@ int main (int argc, char** argv){
           0, 0;
     std::cout << "x0 = \n" << x0 << "\n\n";
 // ------------------------------------------------
-//-------------------One RHS Test------------------          
+//-------------------One RHS Test------------------
+//      BlBiCGSTAB bcg(A, b, x0, 0.001);          
 //     Eigen::Vector3d b(0, 1, 0);
 //     std::cout << b << "\n\n";
 //     Eigen::Vector3d x0(0, 0, 0);
 // ------------------------------------------------
 //--------------BlBiCGSTAB Solve-------------------
-    BlBiCGSTAB bcg(A, b, x0, 0.1);
+    BlBiCGSTAB bcg(A, b, x0, 0.001);
     bcg.solve();
-    std::cout << bcg.Xk << "\n\n";
+    std::cout << "Solution = \n" << bcg.Xk << "\n\n";
 //-------------------------------------------------    
 // ----------------L_solve Test--------------------
 //     Eigen::VectorXd b(3);

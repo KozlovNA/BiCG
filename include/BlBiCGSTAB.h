@@ -4,6 +4,8 @@
 #include<Eigen/Dense>
 #include<LU.h>
 #include<iostream>
+#include<vector>
+#include<algorithm>
 
 class BlBiCGSTAB {
 public:
@@ -24,12 +26,14 @@ public:
     Eigen::MatrixXd Tk; 
     double omega;
 
+    double R0_2norm_max;
 
 public:
     BlBiCGSTAB(Eigen::MatrixXd _A, Eigen::MatrixXd _B, Eigen::MatrixXd _X0,
                double epsilon);
 
     void solve();
+    bool check_exit();
 };
 
 #endif

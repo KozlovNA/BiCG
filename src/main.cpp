@@ -2,6 +2,7 @@
 # include <Eigen/Dense>
 # include <BiCGSTAB.h>
 # include <BlBiCGSTAB.h>
+# include <fbinio.h>
 
 int main (int argc, char** argv){
 // ------------Linear system AX = B-----------------      
@@ -69,6 +70,14 @@ int main (int argc, char** argv){
 //     Eigen::MatrixXd rhs = tmp;
 //     std::cout << rhs << "\n\n";
 //     Eigen::MatrixXd sol = LU_solve(A, rhs);
-//     std::cout << sol << "\n\n";     
+//     std::cout << sol << "\n\n";
+//-----------------------fbinio test--------------------
+Eigen::MatrixXd mat(10, 10);
+// read_binary<Eigen::MatrixXcf>("/home/starman/mat_alm_full.dat", mat);
+Eigen::MatrixXd matwr = Eigen::MatrixXd::Random(10, 10);
+write_binary<Eigen::MatrixXd>("matwr.dat", matwr);
+read_binary<Eigen::MatrixXd>("matwr.dat", mat); 
+std::cout << mat << "\n\n";     
+//------------------------------------------------
 return 0;
 }

@@ -13,35 +13,32 @@ int main (int argc, char** argv){
     std::cout << "A = \n" << A << "\n\n";
 // -------------------------------------------------
 // ------------------Many RHS Test------------------
-    Eigen::MatrixXd b(3, 2);
-    b << 10, 0,
-          3, 1,
-          3, 0;
-    std::cout << "b = \n" << b << "\n\n";
-    Eigen::MatrixXd x0(3, 2);
-    x0 << 0, 0,
-          0, 0,
-          0, 0;
-    std::cout << "x0 = \n" << x0 << "\n\n";
+    // Eigen::MatrixXd b(3, 2);
+    // b << 10, 0,
+    //       3, 1,
+    //       3, 0;
+    // std::cout << "b = \n" << b << "\n\n";
+    // Eigen::MatrixXd x0(3, 2);
+    // x0 << 0, 0,
+    //       0, 0,
+    //       0, 0;
+    // std::cout << "x0 = \n" << x0 << "\n\n";
 // ------------------------------------------------
 //-------------------One RHS Test------------------
-//      BlBiCGSTAB bcg(A, b, x0, 0.001);          
-//     Eigen::Vector3d b(0, 1, 0);
-//     std::cout << b << "\n\n";{
-//     std::ifstream in(filename, std::ios::in | std::ios::binary);
-//     uint32_t rows=0, cols=0;
-//     in.read((char*) (&rows),sizeof(uint32_t));
-//     in.read((char*) (&cols),sizeof(uint32_t));
-//     matrix.resize(rows, cols);
-//     in.read((char *) matrix.data() , rows*cols*sizeof(typename Matrix::Scalar));
-//     in.close();
-// }
-//     Eigen::Vector3d x0(0, 0, 0);
+    Eigen::Vector3d b(0, 1, 0);
+    std::cout << b << "\n\n";
+    Eigen::Vector3d x0(0, 0, 0);
+    std::cout << x0 << "\n\n";
+
+    BiCGSTAB bcg(A, b, x0, 0.001);
+    bcg.solve();
+    std::cout << "Solution = \n" << bcg.xk << "\n\n";
+
 // ------------------------------------------------
 //--------------BlBiCGSTAB Solve-------------------
-    BlBiCGSTAB bcg(A, b, x0, 0.001);
-    bcg.solve();
-    std::cout << "Solution = \n" << bcg.Xk << "\n\n";
+    // BlBiCGSTAB bcg(A, b, x0, 0.001);
+    // bcg.solve();
+    // std::cout << "Solution = \n" << bcg.Xk << "\n\n";
 //-------------------------------------------------    
 // ----------------L_solve Test--------------------
 //     Eigen::VectorXd b(3);
@@ -80,12 +77,12 @@ int main (int argc, char** argv){
 //     Eigen::MatrixXd sol = LU_solve(A, rhs);
 //     std::cout << sol << "\n\n";
 //-----------------------fbinio test-----------------
-Eigen::MatrixXd mat(10, 10);
-// read_binary<Eigen::MatrixXcf>("/home/starman/mat_alm_full.dat", mat);
-Eigen::MatrixXd matwr = Eigen::MatrixXd::Random(10, 10);
-write_binary<Eigen::MatrixXd>("matwr.dat", matwr);
-read_binary<Eigen::MatrixXd>("matwr.dat", mat);
-std::cout << mat << "\n\n";
+// Eigen::MatrixXd mat(10, 10);
+// // read_binary<Eigen::MatrixXcf>("/home/starman/mat_alm_full.dat", mat);
+// Eigen::MatrixXd matwr = Eigen::MatrixXd::Random(10, 10);
+// write_binary<Eigen::MatrixXd>("matwr.dat", matwr);
+// read_binary<Eigen::MatrixXd>("matwr.dat", mat);
+// std::cout << mat << "\n\n";
 //------------------------------------------------
 return 0;
 }

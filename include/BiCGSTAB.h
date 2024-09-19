@@ -1,8 +1,11 @@
 #ifndef BICGSTAB_H
 #define BICGSTAB_H
 
-#include<Eigen/Dense>
-#include<iostream>
+
+#include <Eigen/Dense>
+#include <iostream>
+#include <fstream>
+#include <chrono>
 
 class BiCGSTAB {
 public:
@@ -15,6 +18,7 @@ public:
     Eigen::VectorXd rk;
     Eigen::VectorXd vk;
     Eigen::VectorXd pk;
+    Eigen::VectorXd rkp1;
     double alpha;
     Eigen::VectorXd sk;
     Eigen::VectorXd tk;
@@ -26,6 +30,7 @@ public:
              double _epsilon);
 
     void solve();
+
 };
 
 #endif

@@ -25,9 +25,11 @@ int main (int argc, char** argv){
     // std::cout << "x0 = \n" << x0 << "\n\n";
 // ------------------------------------------------
 //-------------------One RHS Test------------------
-    Eigen::Vector3d b(0, 1, 0);
+    Eigen::VectorXd b(3);
+    b << 0, 1, 0;
     std::cout << b << "\n\n";
-    Eigen::Vector3d x0(0, 0, 0);
+    Eigen::VectorXd x0(3);
+    x0 << 0, 0 ,0; 
     std::cout << x0 << "\n\n";
 
     BiCGSTAB bcg(A, b, x0, 0.001);

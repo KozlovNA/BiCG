@@ -4,8 +4,7 @@ project(BiCG)
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
-add_executable(main src/main.cpp src/BiCGSTAB.cpp src/BlBiCGSTAB.cpp src/LU.cpp
-               )
+add_executable(main src/main.cpp src/BiCGSTAB.cpp src/BlBiCGSTAB.cpp src/LU.cpp)
 
 include_directories(./include)
 

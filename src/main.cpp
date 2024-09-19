@@ -27,7 +27,15 @@ int main (int argc, char** argv){
 //-------------------One RHS Test------------------
 //      BlBiCGSTAB bcg(A, b, x0, 0.001);          
 //     Eigen::Vector3d b(0, 1, 0);
-//     std::cout << b << "\n\n";
+//     std::cout << b << "\n\n";{
+//     std::ifstream in(filename, std::ios::in | std::ios::binary);
+//     uint32_t rows=0, cols=0;
+//     in.read((char*) (&rows),sizeof(uint32_t));
+//     in.read((char*) (&cols),sizeof(uint32_t));
+//     matrix.resize(rows, cols);
+//     in.read((char *) matrix.data() , rows*cols*sizeof(typename Matrix::Scalar));
+//     in.close();
+// }
 //     Eigen::Vector3d x0(0, 0, 0);
 // ------------------------------------------------
 //--------------BlBiCGSTAB Solve-------------------
@@ -71,13 +79,13 @@ int main (int argc, char** argv){
 //     std::cout << rhs << "\n\n";
 //     Eigen::MatrixXd sol = LU_solve(A, rhs);
 //     std::cout << sol << "\n\n";
-//-----------------------fbinio test--------------------
+//-----------------------fbinio test-----------------
 Eigen::MatrixXd mat(10, 10);
 // read_binary<Eigen::MatrixXcf>("/home/starman/mat_alm_full.dat", mat);
 Eigen::MatrixXd matwr = Eigen::MatrixXd::Random(10, 10);
 write_binary<Eigen::MatrixXd>("matwr.dat", matwr);
-read_binary<Eigen::MatrixXd>("matwr.dat", mat); 
-std::cout << mat << "\n\n";     
+read_binary<Eigen::MatrixXd>("matwr.dat", mat);
+std::cout << mat << "\n\n";
 //------------------------------------------------
 return 0;
 }

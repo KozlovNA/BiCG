@@ -1,4 +1,6 @@
 #include <BiCGSTAB.h>
+# include <fbinio.h>
+
 
 BiCGSTAB::BiCGSTAB(Eigen::MatrixXd _A, Eigen::VectorXd _b, Eigen::VectorXd _x0, double _epsilon):
                     A(_A), b(_b), xk(_x0), epsilon(_epsilon)
@@ -42,7 +44,6 @@ void BiCGSTAB::solve(){
         matvec_count++;
         omega = tk.dot(sk)/tk.dot(tk);
         xk += alpha * pk + omega * sk;
-        // std::cout << "OMEGA = " << omega << "\n\n";
         rkp1 = sk - omega * tk;
         std::cout << "step: " << k + 1 << ", (rk,rk)^1/2 = " << std::sqrt(rkp1.dot(rkp1)) << "\n\n" << "xk = \n" << xk << "\n\n\n\n";
         check = std::chrono::high_resolution_clock::now();
@@ -57,26 +58,9 @@ void BiCGSTAB::solve(){
         pk = rkp1 + beta * (pk - omega * vk);
         k+=1;
     }
-    // std::cout << "step: " << k << ", (sk,sk)^1/2 = " << std::sqrt(sk.dot(sk)) << "\n\n";
+    logs.close();
+    write_binary("BiCGSTAB_solution.dat", xk);
+    Eigen::MatrixXd sol(3, 3);
+    read_binary("BiCGSTAB_solution.dat", sol);
+    std::cout << sol << "\n\n";
 }
-// void BiCGSTAB::solve(){
-//     int k = 0;
-//     while (k < n){
-//         vk = A*pk;
-//         alpha = r0c.dot(rk)/r0c.dot(vk);
-//         sk = rk - alpha*vk;
-//         std::cout << "step: " << k << ", (rk,rk)^1/2 = " << std::sqrt(rk.dot(rk)) << "\n\n";
-//         std::cout << "xk = \n" << xk << "\n\n";
-//         if (rk.dot(rk) < epsilon*epsilon)
-//             break;
-//         tk = A*sk;
-//         omega = tk.dot(sk)/tk.dot(tk);
-//         xk += alpha * pk + omega * sk;
-//         Eigen::VectorXd rkp1 = sk - omega * tk;
-//         beta = r0c.dot(rkp1)/r0c.dot(rk)*alpha/omega;
-//         rk = rkp1;
-//         pk = rkp1 + beta * (pk - omega * vk);
-//         k+=1;
-//     }
-//     std::cout << "step: " << k << ", (sk,sk)^1/2 = " << std::sqrt(sk.dot(sk)) << "\n\n";
-// }

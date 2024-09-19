@@ -80,7 +80,6 @@ int main (int argc, char** argv){
 //     std::cout << sol << "\n\n";
 //-----------------------fbinio test-----------------
 // Eigen::MatrixXd mat(10, 10);
-// // read_binary<Eigen::MatrixXcf>("/home/starman/mat_alm_full.dat", mat);
 // Eigen::MatrixXd matwr = Eigen::MatrixXd::Random(10, 10);
 // write_binary<Eigen::MatrixXd>("matwr.dat", matwr);
 // read_binary<Eigen::MatrixXd>("matwr.dat", mat);

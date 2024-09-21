@@ -6,31 +6,39 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+# include <fbinio.h>
 
+template<typename T>
 class BiCGSTAB {
 public:
+    typedef Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> MatrixXT;
+    typedef Eigen::Matrix<T, Eigen::Dynamic, 1> VectorXT;
     int n;
-    Eigen::MatrixXd A;
-    Eigen::VectorXd b;
-    Eigen::VectorXd r0c; 
+    MatrixXT A;
+    VectorXT b;
+    VectorXT r0c; 
     double epsilon; 
 
-    Eigen::VectorXd rk;
-    Eigen::VectorXd vk;
-    Eigen::VectorXd pk;
-    Eigen::VectorXd rkp1;
-    double alpha;
-    Eigen::VectorXd sk;
-    Eigen::VectorXd tk;
-    double omega;
-    double beta;
-    Eigen::VectorXd xk;
+    VectorXT rk;
+    VectorXT vk;
+    VectorXT pk;
+    VectorXT rkp1;
+    T alpha;
+    VectorXT sk;
+    VectorXT tk;
+    T omega;
+    T beta;
+    VectorXT xk;
 public:
-    BiCGSTAB(Eigen::MatrixXd _A, Eigen::VectorXd _b, Eigen::VectorXd _x0,
+    BiCGSTAB(MatrixXT _A, VectorXT _b, VectorXT _x0,
              double _epsilon);
 
     void solve();
 
+    double norm_sq (VectorXT vec);
+
 };
+
+# include <../src/BiCGSTAB.cpp>
 
 #endif

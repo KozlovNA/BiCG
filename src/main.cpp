@@ -6,11 +6,11 @@
 
 int main (int argc, char** argv){
 // ------------Linear system AX = B-----------------      
-    Eigen::MatrixXd A(3,3);
-    A << 2, 3, 5,
-         3, 7, 4,
-         1, 2, 2;  
-    std::cout << "A = \n" << A << "\n\n";
+    // Eigen::MatrixXd A(3,3);
+    // A << 2, 3, 5,
+    //      3, 7, 4,
+    //      1, 2, 2;  
+    // std::cout << "A = \n" << A << "\n\n";
 // -------------------------------------------------
 // ------------------Many RHS Test------------------
     // Eigen::MatrixXd b(3, 2);
@@ -25,16 +25,16 @@ int main (int argc, char** argv){
     // std::cout << "x0 = \n" << x0 << "\n\n";
 // ------------------------------------------------
 //-------------------One RHS Test------------------
-    Eigen::VectorXd b(3);
-    b << 0, 1, 0;
-    std::cout << b << "\n\n";
-    Eigen::VectorXd x0(3);
-    x0 << 0, 0 ,0; 
-    std::cout << x0 << "\n\n";
+    // Eigen::VectorXd b(3);
+    // b << 0, 1, 0;
+    // std::cout << b << "\n\n";
+    // Eigen::VectorXd x0(3);
+    // x0 << 0, 0 ,0; 
+    // std::cout << x0 << "\n\n";
 
-    BiCGSTAB bcg(A, b, x0, 0.001);
-    bcg.solve();
-    std::cout << "Solution = \n" << bcg.xk << "\n\n";
+    // BiCGSTAB bcg(A, b, x0, 0.001);
+    // bcg.solve();
+    // std::cout << "Solution = \n" << bcg.xk << "\n\n";
 
 // ------------------------------------------------
 //--------------BlBiCGSTAB Solve-------------------
@@ -85,5 +85,19 @@ int main (int argc, char** argv){
 // read_binary<Eigen::MatrixXd>("matwr.dat", mat);
 // std::cout << mat << "\n\n";
 //------------------------------------------------
+
+//-----------------combat task----------------------
+Eigen::MatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
+Eigen::MatrixXcf A(3,3);    // be resized
+
+read_binary("/home/starman/rhs_alm_722.dat", rhs);
+read_binary("/home/starman/mat_alm_full.dat", A);
+Eigen::VectorXcf b = rhs.col(42);
+std::cout << "A is " << A.rows() << "x" << A.cols() << "\n\n";
+std::cout << "b is " << b.rows() << "x" << b.cols() << "\n\n";
+Eigen::VectorXcf x0 = Eigen::VectorXcf::Zero(b.rows()); 
+BiCGSTAB bcg(A, b, x0, 0.001);
+bcg.solve();
+//--------------------------------------------------
 return 0;
 }

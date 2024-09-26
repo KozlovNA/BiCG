@@ -37,7 +37,7 @@ template<typename T>
 void BiCGSTAB<T>::solve(){
     int k = 0;
     int matvec_count = 0;
-    std::ofstream logs("BiCGSTAB_logs.csv", std::ios::out | std::ios::trunc);
+    std::ofstream logs("../output/BiCGSTAB_logs.csv", std::ios::out | std::ios::trunc);
     logs << "k,time,res_2norm_rel,matvec_count\n";
     auto start = std::chrono::high_resolution_clock::now();
     auto check = std::chrono::high_resolution_clock::now();
@@ -77,5 +77,5 @@ void BiCGSTAB<T>::solve(){
         k+=1;
     }
     logs.close();
-    write_binary("BiCGSTAB_solution.dat", xk);
+    write_binary("../output/BiCGSTAB_solution.dat", xk);
 }

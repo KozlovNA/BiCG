@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-# include <fbinio.h>
+#include <fbinio.h>
 
 template<typename T>
 class BiCGSTAB {

@@ -6,23 +6,23 @@
 
 int main (int argc, char** argv){
 // ------------Linear system AX = B-----------------      
-    Eigen::MatrixXcd A(3,3);
-    A << 2, 3, 5,
-         3, 7, 4,
-         1, 2, 2;  
-    std::cout << "A = \n" << A << "\n\n";
+    // Eigen::MatrixXcd A(3,3);
+    // A << 2, 3, 5,
+    //      3, 7, 4,
+    //      1, 2, 2;  
+    // std::cout << "A = \n" << A << "\n\n";
 // -------------------------------------------------
 // ------------------Many RHS Test------------------
-    Eigen::MatrixXcd b(3, 2);
-    b << 10, 0,
-          3, 1,
-          3, 0;
-    std::cout << "b = \n" << b << "\n\n";
-    Eigen::MatrixXcd x0(3, 2);
-    x0 << 0, 0,
-          0, 0,
-          0, 0;
-    std::cout << "x0 = \n" << x0 << "\n\n";
+    // Eigen::MatrixXcd b(3, 2);
+    // b << 10, 0,
+    //       3, 1,
+    //       3, 0;
+    // std::cout << "b = \n" << b << "\n\n";
+    // Eigen::MatrixXcd x0(3, 2);
+    // x0 << 0, 0,
+    //       0, 0,
+    //       0, 0;
+    // std::cout << "x0 = \n" << x0 << "\n\n";
 // ------------------------------------------------
 //-------------------One RHS Test------------------
     // Eigen::VectorXd b(3);
@@ -38,9 +38,9 @@ int main (int argc, char** argv){
 
 // ------------------------------------------------
 //--------------BlBiCGSTAB Solve-------------------
-    BlBiCGSTAB<Eigen::MatrixXcd, Eigen::VectorXcd> bcg(A, b, x0, 0.001);
-    bcg.solve();
-    std::cout << "Solution = \n" << bcg.Xk << "\n\n";
+    // BlBiCGSTAB<Eigen::MatrixXcd, Eigen::VectorXcd> bcg(A, b, x0, 0.001);
+    // bcg.solve();
+    // std::cout << "Solution = \n" << bcg.Xk << "\n\n";
 //-------------------------------------------------    
 // ----------------L_solve Test--------------------
 //     Eigen::VectorXd b(3);
@@ -87,18 +87,33 @@ int main (int argc, char** argv){
 //------------------------------------------------
 
 //-----------------BiCGSTAB combat task----------------------
+Eigen::MatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
+Eigen::MatrixXcf A(3,3);    // be resized
+
+read_binary("/home/starman/rhs_alm_722.dat", rhs);
+read_binary("/home/starman/mat_alm_full.dat", A);
+Eigen::VectorXcf b = rhs.col(0);
+std::cout << "A is " << A.rows() << "x" << A.cols() << "\n\n";
+std::cout << "b is " << b.rows() << "x" << b.cols() << "\n\n";
+Eigen::VectorXcf x0 = Eigen::VectorXcf::Zero(b.rows()); 
+BiCGSTAB bcg(A, b, x0, 0.001);
+bcg.solve();
+//-----------------BlBiCG combat task-------------------------
 // Eigen::MatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
 // Eigen::MatrixXcf A(3,3);    // be resized
 
 // read_binary("/home/starman/rhs_alm_722.dat", rhs);
 // read_binary("/home/starman/mat_alm_full.dat", A);
-// Eigen::VectorXcf b = rhs.col(42);
+
+// Eigen::MatrixXcf B = rhs.leftCols(1);
+
 // std::cout << "A is " << A.rows() << "x" << A.cols() << "\n\n";
-// std::cout << "b is " << b.rows() << "x" << b.cols() << "\n\n";
-// Eigen::VectorXcf x0 = Eigen::VectorXcf::Zero(b.rows()); 
-// BiCGSTAB bcg(A, b, x0, 0.001);
-// bcg.solve();
-//-----------------BlBiCG combat task-------------------------
+// std::cout << "B is " << B.rows() << "x" << B.cols() << "\n\n";
+
+// Eigen::MatrixXcf X0 = Eigen::MatrixXcf::Zero(B.rows(), B.cols());
+
+// BlBiCGSTAB<Eigen::MatrixXcf, Eigen::VectorXcf> bbcg(A, B, X0, 0.001);
+// bbcg.solve();
 //------------------------------------------------------------
 
 return 0;

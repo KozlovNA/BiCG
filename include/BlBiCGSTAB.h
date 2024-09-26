@@ -7,8 +7,11 @@
 #include <algorithm>
 #include <concepts>
 #include <type_traits>
+#include <fstream>
+#include <chrono>
+#include <fbinio.h>
 
-// TODO: add concept to BlBiCGSTAB
+// TODO:
 // template<class MatrixT, class VectorT>
 // concept  MatVecObj = requires(MatrixT mat, VectorT vec)
 // {
@@ -66,7 +69,8 @@ public:
                double epsilon);
 
     void solve();
-    bool check_exit();
+    bool check_exit(MatrixT&);
+    double norm2_max(MatrixT&);
 };
 
 #include <../src/BlBiCGSTAB.cpp>

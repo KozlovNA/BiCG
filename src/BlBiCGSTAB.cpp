@@ -23,7 +23,7 @@ void BlBiCGSTAB<MatrixT, VectorT>::solve()
     auto start = std::chrono::high_resolution_clock::now();
     auto check = std::chrono::high_resolution_clock::now();
     while (k < (N+s-1)/s){
-        Vk = A*Pk;
+        Vk = A.matvec(Pk);
         matvec_count += Pk.cols();
         MatrixT alpha_system = R0c.adjoint()*Vk;
         MatrixT alpha_rhs = R0c.adjoint()*Rk;
@@ -41,7 +41,7 @@ void BlBiCGSTAB<MatrixT, VectorT>::solve()
         if (check_exit(Sk)){
             Xk += Pk*alpha;
             break;}
-        Tk = A*Sk;
+        Tk = A.matvec(Sk);
         matvec_count += Sk.cols();
         omega = (Tk.adjoint()*Sk).trace() / ((Tk.adjoint()*Tk).trace());
         Xk += Pk*alpha + omega*Sk;

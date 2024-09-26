@@ -2,6 +2,7 @@
 # include <Eigen/Dense>
 # include <BiCGSTAB.h>
 # include <BlBiCGSTAB.h>
+# include <MatVec.h>
 # include <fbinio.h>
 
 int main (int argc, char** argv){
@@ -85,35 +86,34 @@ int main (int argc, char** argv){
 // read_binary<Eigen::MatrixXd>("matwr.dat", mat);
 // std::cout << mat << "\n\n";
 //------------------------------------------------
-
 //-----------------BiCGSTAB combat task----------------------
-Eigen::MatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
-Eigen::MatrixXcf A(3,3);    // be resized
-
-read_binary("/home/starman/rhs_alm_722.dat", rhs);
-read_binary("/home/starman/mat_alm_full.dat", A);
-Eigen::VectorXcf b = rhs.col(0);
-std::cout << "A is " << A.rows() << "x" << A.cols() << "\n\n";
-std::cout << "b is " << b.rows() << "x" << b.cols() << "\n\n";
-Eigen::VectorXcf x0 = Eigen::VectorXcf::Zero(b.rows()); 
-BiCGSTAB bcg(A, b, x0, 0.001);
-bcg.solve();
-//-----------------BlBiCG combat task-------------------------
-// Eigen::MatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
-// Eigen::MatrixXcf A(3,3);    // be resized
+// MyMatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
+// MyMatrixXcf A(3,3);    // be resized
 
 // read_binary("/home/starman/rhs_alm_722.dat", rhs);
 // read_binary("/home/starman/mat_alm_full.dat", A);
-
-// Eigen::MatrixXcf B = rhs.leftCols(1);
-
+// MyMatrixXcf b = rhs.col(0);
 // std::cout << "A is " << A.rows() << "x" << A.cols() << "\n\n";
-// std::cout << "B is " << B.rows() << "x" << B.cols() << "\n\n";
+// std::cout << "b is " << b.rows() << "x" << b.cols() << "\n\n";
+// MyMatrixXcf x0 = MyMatrixXcf::Zero(b.rows()); 
+// BiCGSTAB bcg<MyMatrixXcf, Eigen::VectorXcf>(A, b, x0, 0.001);
+// bcg.solve();
+//-----------------BlBiCG combat task-------------------------
+MyMatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
+MyMatrixXcf A(3,3);    // be resized
 
-// Eigen::MatrixXcf X0 = Eigen::MatrixXcf::Zero(B.rows(), B.cols());
+read_binary("/home/starman/rhs_alm_722.dat", rhs);
+read_binary("/home/starman/mat_alm_full.dat", A);
 
-// BlBiCGSTAB<Eigen::MatrixXcf, Eigen::VectorXcf> bbcg(A, B, X0, 0.001);
-// bbcg.solve();
+MyMatrixXcf B = rhs.leftCols(1);
+
+std::cout << "A is " << A.rows() << "x" << A.cols() << "\n\n";
+std::cout << "B is " << B.rows() << "x" << B.cols() << "\n\n";
+
+MyMatrixXcf X0 = MyMatrixXcf::Zero(B.rows(), B.cols());
+
+BlBiCGSTAB<MyMatrixXcf, Eigen::VectorXcf> bbcg(A, B, X0, 0.001);
+bbcg.solve();
 //------------------------------------------------------------
 
 return 0;

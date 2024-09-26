@@ -5,7 +5,7 @@ MatrixT LU_solve(MatrixT &A, MatrixT &B)
 {
     assert(A.cols()==A.rows());
     int s = B.cols();
-    Eigen::FullPivLU<MatrixT> lu(A);
+    Eigen::FullPivLU<Eigen::MatrixX<typename MatrixT::Scalar>> lu(A);
     MatrixT U = lu.matrixLU().template triangularView<Eigen::Upper>(); 
     int n = B.rows();
     MatrixT L =  MatrixT::Identity(n, n);

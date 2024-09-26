@@ -37,6 +37,8 @@ public:
 
     double norm_sq (VectorXT vec);
 
+
+
 };
 
 # include <../src/BiCGSTAB.cpp>

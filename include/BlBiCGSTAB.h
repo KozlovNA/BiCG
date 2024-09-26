@@ -1,39 +1,74 @@
 #ifndef BLBICGSTAB_H
 #define BLBICGSTAB_H
 
-#include<Eigen/Dense>
-#include<LU.h>
-#include<iostream>
-#include<vector>
-#include<algorithm>
+#include <LU.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <concepts>
+#include <type_traits>
 
+// TODO: add concept to BlBiCGSTAB
+// template<class MatrixT, class VectorT>
+// concept  MatVecObj = requires(MatrixT mat, VectorT vec)
+// {
+//     requires std::is_same_v<typename MatrixT::Scalar, typename VectorT::Scalar>;    
+//     mat+mat;
+//     mat-mat;
+//     mat*mat;
+//     mat*vec;
+//     vec+vec;
+//     vec-vec;
+//     vec*vec;
+//     vec*mat;
+//     mat.rows();
+//     mat.cols();
+//     vec.rows();
+//     mat.matvec(vec);
+//     mat.col(0);
+//     mat.adjoint();
+//     vec.adjoint();
+//     LU_solve<MatrixT, VectorT>(mat, mat);
+//     mat.trace();
+    
+// };
+
+// template <class MatrixT>
+// concept ScalarIsComplex = requires(MatrixT m) 
+// {
+// requires std::is_same_v<typename std::remove_cv_t<typename MatrixT::Scalar>, std::complex<typename std::remove_cv_t<typename MatrixT::Scalar>::value_type>>;
+// }; 
+
+template<class MatrixT, class VectorT>
 class BlBiCGSTAB {
-public:
-    Eigen::MatrixXd A;
-    Eigen::MatrixXd B;
-    Eigen::MatrixXd Xk;
+public:  
+    MatrixT A;
+    MatrixT B;
+    MatrixT Xk;
     double epsilon;
     int N;
     int s;
 
-    Eigen::MatrixXd Rk;
-    Eigen::MatrixXd Pk;
-    Eigen::MatrixXd R0c;
-    Eigen::MatrixXd Vk;
-    Eigen::MatrixXd alpha;
-    Eigen::MatrixXd beta;
-    Eigen::MatrixXd Sk;
-    Eigen::MatrixXd Tk; 
-    double omega;
+    MatrixT Rk;
+    MatrixT Pk;
+    MatrixT R0c;
+    MatrixT Vk;
+    MatrixT alpha;
+    MatrixT beta;
+    MatrixT Sk;
+    MatrixT Tk; 
+    typename MatrixT::Scalar omega;
 
     double R0_2norm_max;
 
 public:
-    BlBiCGSTAB(Eigen::MatrixXd _A, Eigen::MatrixXd _B, Eigen::MatrixXd _X0,
+    BlBiCGSTAB(MatrixT _A, MatrixT _B, MatrixT _X0,
                double epsilon);
 
     void solve();
     bool check_exit();
 };
+
+#include <../src/BlBiCGSTAB.cpp>
 
 #endif

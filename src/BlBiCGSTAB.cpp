@@ -7,8 +7,9 @@ BlBiCGSTAB<MatrixT, VectorT>::BlBiCGSTAB(MatrixT  _A, MatrixT  _B, MatrixT  _X0,
     N = Xk.rows();
     s = Xk.cols();
     Rk = B - A*Xk;
-    Pk = Rk;
     R0c = Rk;
+    // Pk = Rk;
+    Pk = orth(Rk, epsilon);
     
     R0_2norm_max = norm2_max(R0c);
 }
@@ -22,6 +23,7 @@ void BlBiCGSTAB<MatrixT, VectorT>::solve()
     logs << "k,time,res_max2norm_rel,matvec_count\n";
     auto start = std::chrono::high_resolution_clock::now();
     auto check = std::chrono::high_resolution_clock::now();
+
     while (k < (N+s-1)/s){
         Vk = A.matvec(Pk);
         matvec_count += Pk.cols();
@@ -39,13 +41,15 @@ void BlBiCGSTAB<MatrixT, VectorT>::solve()
              << matvec_count << '\n';
         
         if (check_exit(Sk)){
-            Xk += Pk*alpha;
-            break;}
+           Xk += Pk*alpha;
+           break;}
+
         Tk = A.matvec(Sk);
         matvec_count += Sk.cols();
         omega = (Tk.adjoint()*Sk).trace() / ((Tk.adjoint()*Tk).trace());
         Xk += Pk*alpha + omega*Sk;
         Rk = Sk - omega*Tk;
+
         double rk_norm_sq_rel = norm2_max(Rk)/R0_2norm_max;      
         std::cout << "step: " << float(k) + 1 << ", residuals 2norm ratio = " << std::sqrt(rk_norm_sq_rel) << "\n\n";
         check = std::chrono::high_resolution_clock::now();
@@ -53,12 +57,15 @@ void BlBiCGSTAB<MatrixT, VectorT>::solve()
              << std::chrono::duration_cast<std::chrono::microseconds>(check-start).count() << "," 
              << std::sqrt(rk_norm_sq_rel) << ',' 
              << matvec_count << '\n';
+
         if (check_exit(Rk)) break;
+
         MatrixT beta_system = R0c.adjoint()*Vk;
         MatrixT beta_rhs = -R0c.adjoint()*Tk;
         beta = LU_solve<MatrixT, VectorT>(beta_system, beta_rhs);
         MatrixT Pk_prev = Pk;
-        Pk = Rk + (Pk_prev - omega*Vk)*beta;
+        MatrixT Pkt = Rk + (Pk_prev - omega*Vk)*beta;
+        Pk = orth(Pkt, epsilon);
         k+=1;
     }
     logs.close();
@@ -84,3 +91,27 @@ double BlBiCGSTAB<MatrixT, VectorT>::norm2_max(MatrixT& Mat)
     double Res_2norm_max = *std::max_element(R_norms.begin(), R_norms.end());
     return Res_2norm_max;
 }
+
+template<class MatrixT, class VectorT>
+MatrixT BlBiCGSTAB<MatrixT, VectorT>::orth(MatrixT& A, double eps)
+{
+    MatrixT Q;
+    MatrixT P;
+    Eigen::ColPivHouseholderQR<Eigen::MatrixX<typename MatrixT::Scalar>> qr(A);
+    // std::cout << qr.rank() << "\n\n";
+    qr.setThreshold(eps);
+    Q = qr.householderQ();
+    P = qr.colsPermutation();
+    return Q.leftCols(qr.rank());
+}
+
+// template<class MatrixT>
+// MatrixT QR_solve<MatrixT>(MatrixT& A, MatrixT& B)
+// {
+//     MatrixT Q;
+//     MatrixT R
+//     Eigen::HouseholderQR<Eigen::MatrixX<typename MatrixT::Scalar>> qr(A);
+//     Q = qr.householderQ();
+//     R = qr.matrixQR().triangularView<Eigen::Upper>();  
+//     U_solve
+// }

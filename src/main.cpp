@@ -7,23 +7,23 @@
 
 int main (int argc, char** argv){
 // ------------Linear system AX = B-----------------      
-    // Eigen::MatrixXcd A(3,3);
+    // MyMatrixXd A(3,3);
     // A << 2, 3, 5,
     //      3, 7, 4,
     //      1, 2, 2;  
     // std::cout << "A = \n" << A << "\n\n";
 // -------------------------------------------------
 // ------------------Many RHS Test------------------
-    // Eigen::MatrixXcd b(3, 2);
-    // b << 10, 0,
+    // MyMatrixXd B(3, 2);
+    // B << 10, 0,
     //       3, 1,
     //       3, 0;
-    // std::cout << "b = \n" << b << "\n\n";
-    // Eigen::MatrixXcd x0(3, 2);
-    // x0 << 0, 0,
+    // std::cout << "b = \n" << B << "\n\n";
+    // MyMatrixXd X0(3, 2);
+    // X0 << 0, 0,
     //       0, 0,
     //       0, 0;
-    // std::cout << "x0 = \n" << x0 << "\n\n";
+    // std::cout << "x0 = \n" << X0 << "\n\n";
 // ------------------------------------------------
 //-------------------One RHS Test------------------
     // Eigen::VectorXd b(3);
@@ -49,7 +49,7 @@ int main (int argc, char** argv){
 //          2,
 //          6;
 //     std::cout << b << "\n\n";
-//     Eigen::MatrixXd L(3, 3);
+//     MyMatrixXd L(3, 3);
 //     L << 1, 0, 0,
 //          1, 1, 0,
 //          2, 3, 1;
@@ -64,7 +64,7 @@ int main (int argc, char** argv){
       //       2,
       //       1;
       // std::cout << b << "\n\n";
-      // Eigen::MatrixXd U(3, 3);
+      // MyMatrixXd U(3, 3);
       // U << 1, 2, 3,
       // 0, 1, 1,
       // 0, 0, 1;
@@ -75,28 +75,28 @@ int main (int argc, char** argv){
 // ----------------------------------------------
 // ------------------LU_solve Test----------------
 //     Eigen::Vector3d tmp(0, 1, 0);
-//     Eigen::MatrixXd rhs = tmp;
+//     MyMatrixXd rhs = tmp;
 //     std::cout << rhs << "\n\n";
-//     Eigen::MatrixXd sol = LU_solve(A, rhs);
+//     MyMatrixXd sol = LU_solve(A, rhs);
 //     std::cout << sol << "\n\n";
 //-----------------------fbinio test-----------------
-// Eigen::MatrixXd mat(10, 10);
-// Eigen::MatrixXd matwr = Eigen::MatrixXd::Random(10, 10);
-// write_binary<Eigen::MatrixXd>("matwr.dat", matwr);
-// read_binary<Eigen::MatrixXd>("matwr.dat", mat);
+// MyMatrixXd mat(10, 10);
+// MyMatrixXd matwr = MyMatrixXd::Random(10, 10);
+// write_binary<MyMatrixXd>("matwr.dat", matwr);
+// read_binary<MyMatrixXd>("matwr.dat", mat);
 // std::cout << mat << "\n\n";
 //------------------------------------------------
 //-----------------BiCGSTAB combat task----------------------
-// MyMatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
-// MyMatrixXcf A(3,3);    // be resized
+// Eigen::MatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
+// Eigen::MatrixXcf A(3,3);    // be resized
 
 // read_binary("/home/starman/rhs_alm_722.dat", rhs);
 // read_binary("/home/starman/mat_alm_full.dat", A);
 // MyMatrixXcf b = rhs.col(0);
 // std::cout << "A is " << A.rows() << "x" << A.cols() << "\n\n";
 // std::cout << "b is " << b.rows() << "x" << b.cols() << "\n\n";
-// MyMatrixXcf x0 = MyMatrixXcf::Zero(b.rows()); 
-// BiCGSTAB bcg<MyMatrixXcf, Eigen::VectorXcf>(A, b, x0, 0.001);
+// Eigen::VectorXcf x0 = Eigen::VectorXcf::Zero(b.rows()); 
+// BiCGSTAB<std::complex<float>> bcg(A, b, x0, 0.01);
 // bcg.solve();
 //-----------------BlBiCG combat task-------------------------
 MyMatrixXcf rhs(3, 3); // "3" is arbitrary, in read_binary() function it will
@@ -112,7 +112,7 @@ std::cout << "B is " << B.rows() << "x" << B.cols() << "\n\n";
 
 MyMatrixXcf X0 = MyMatrixXcf::Zero(B.rows(), B.cols());
 
-BlBiCGSTAB<MyMatrixXcf, Eigen::VectorXcf> bbcg(A, B, X0, 0.001);
+BlBiCGSTAB<MyMatrixXcf, Eigen::VectorXcf> bbcg(A, B, X0, 0.01);
 bbcg.solve();
 //------------------------------------------------------------
 

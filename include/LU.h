@@ -1,6 +1,6 @@
 #ifndef LU_H
 #define LU_H
-#include <Eigen/Dense>
+// #include <Eigen/Dense>
 #include <iostream>
 
 template<class MatrixT, class VectorT>

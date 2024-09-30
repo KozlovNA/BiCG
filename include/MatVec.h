@@ -13,4 +13,14 @@ public:
     }
 };
 
+class MyMatrixXd: public Eigen::MatrixXd 
+{
+public:
+    using Eigen::MatrixXd::MatrixXd;
+    Eigen::MatrixXd matvec(Eigen::MatrixXd& B) 
+    {
+        return (*this)*B;
+    }
+};
+
 #endif

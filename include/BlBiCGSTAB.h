@@ -2,6 +2,7 @@
 #define BLBICGSTAB_H
 
 #include <LU.h>
+#include<Eigen/Dense>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -71,7 +72,11 @@ public:
     void solve();
     bool check_exit(MatrixT&);
     double norm2_max(MatrixT&);
+    MatrixT orth(MatrixT&, double);
 };
+
+// template<class MatrixT>
+// MatrixT QR_solve(MatrixT&, MatrixT&);
 
 #include <../src/BlBiCGSTAB.cpp>
 

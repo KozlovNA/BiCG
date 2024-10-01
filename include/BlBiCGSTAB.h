@@ -75,8 +75,8 @@ public:
     MatrixT orth(MatrixT&, double);
 };
 
-// template<class MatrixT>
-// MatrixT QR_solve(MatrixT&, MatrixT&);
+template<class MatrixT, class VectorT>
+MatrixT QR_solve(MatrixT&, MatrixT&);
 
 #include <../src/BlBiCGSTAB.cpp>
 

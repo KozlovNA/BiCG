@@ -29,7 +29,7 @@ void BlBiCGSTAB<MatrixT, VectorT>::solve()
         matvec_count += Pk.cols();
         MatrixT alpha_system = R0c.adjoint()*Vk;
         MatrixT alpha_rhs = R0c.adjoint()*Rk;
-        alpha = LU_solve<MatrixT, VectorT>(alpha_system, alpha_rhs);
+        alpha = QR_solve<MatrixT, VectorT>(alpha_system, alpha_rhs);
         Sk = Rk - Vk*alpha;
 
         double sk_norm_sq_rel = norm2_max(Sk)/R0_2norm_max;      
@@ -62,7 +62,7 @@ void BlBiCGSTAB<MatrixT, VectorT>::solve()
 
         MatrixT beta_system = R0c.adjoint()*Vk;
         MatrixT beta_rhs = -R0c.adjoint()*Tk;
-        beta = LU_solve<MatrixT, VectorT>(beta_system, beta_rhs);
+        beta = QR_solve<MatrixT, VectorT>(beta_system, beta_rhs);
         MatrixT Pk_prev = Pk;
         MatrixT Pkt = Rk + (Pk_prev - omega*Vk)*beta;
         Pk = orth(Pkt, epsilon);
@@ -70,6 +70,7 @@ void BlBiCGSTAB<MatrixT, VectorT>::solve()
     }
     logs.close();
     write_binary("../output/BlBiCGSTAB_solution.dat", Xk);
+    std::cout << Xk << "\n\n";
 }
 
 template<class MatrixT, class VectorT>
@@ -96,22 +97,29 @@ template<class MatrixT, class VectorT>
 MatrixT BlBiCGSTAB<MatrixT, VectorT>::orth(MatrixT& A, double eps)
 {
     MatrixT Q;
-    MatrixT P;
+    // MatrixT P;
     Eigen::ColPivHouseholderQR<Eigen::MatrixX<typename MatrixT::Scalar>> qr(A);
     // std::cout << qr.rank() << "\n\n";
     qr.setThreshold(eps);
     Q = qr.householderQ();
-    P = qr.colsPermutation();
+    // P = qr.colsPermutation();
     return Q.leftCols(qr.rank());
 }
 
-// template<class MatrixT>
-// MatrixT QR_solve<MatrixT>(MatrixT& A, MatrixT& B)
-// {
-//     MatrixT Q;
-//     MatrixT R
-//     Eigen::HouseholderQR<Eigen::MatrixX<typename MatrixT::Scalar>> qr(A);
-//     Q = qr.householderQ();
-//     R = qr.matrixQR().triangularView<Eigen::Upper>();  
-//     U_solve
-// }
+template<class MatrixT, class VectorT>
+MatrixT QR_solve(MatrixT& A, MatrixT& B)
+{
+    MatrixT Q;
+    MatrixT R;
+    Eigen::HouseholderQR<Eigen::MatrixX<typename MatrixT::Scalar>> qr(A);
+    Q = qr.householderQ();
+    R = qr.matrixQR().template triangularView<Eigen::Upper>();
+    MatrixT B1 = Q.adjoint()*B;
+    MatrixT X(A.rows(), B.cols());
+    for (int i = 0; i < B1.cols(); i++)
+    {
+        VectorT b = B1.col(i);
+        X.col(i) = U_solve(R, b);
+    }  
+    return X;
+}

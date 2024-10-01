@@ -105,7 +105,7 @@ MyMatrixXcf A(3,3);    // be resized
 read_binary("/home/starman/rhs_alm_722.dat", rhs);
 read_binary("/home/starman/mat_alm_full.dat", A);
 
-MyMatrixXcf B = rhs.leftCols(1);
+MyMatrixXcf B = rhs.leftCols(2);
 
 std::cout << "A is " << A.rows() << "x" << A.cols() << "\n\n";
 std::cout << "B is " << B.rows() << "x" << B.cols() << "\n\n";

@@ -51,7 +51,7 @@ template<class MatrixT, class VectorT>
 VectorT U_solve(MatrixT &U, VectorT &b)
 {
     typename VectorT::Scalar tmp;
-    int n = U.rows();
+    int n = U.cols();
     VectorT x(n);
     for (int i = n-1; i > -1; i--)
     {
